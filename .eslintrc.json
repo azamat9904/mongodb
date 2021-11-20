@@ -1,0 +1,19 @@
+{
+    "env": {
+        "node": true,
+        "es2021": true
+    },
+    "parser": "@typescript-eslint/parser",
+    "parserOptions": {
+        "ecmaVersion": 13,
+        "sourceType": "module",
+        "project": "tsconfig.json"
+    },
+    "plugins": [
+        "@typescript-eslint"
+    ],
+    "rules": {
+        "no-await-in-loop": "error",
+        "no-var": "error"
+    }
+}
