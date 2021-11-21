@@ -1,7 +1,8 @@
 import { Request, Response } from "express";
 import { TokenModel } from "../models/token";
-import {AccountModel, IAccount} from "../models/account";
+import { AccountModel } from "../models/account";
 import { createJwtToken } from "../helpers/createToken";
+import { validationResult } from "express-validator";
 
 const getTokensByUserName = async (req: Request, res: Response) => {
     try{
@@ -36,6 +37,15 @@ const getTokens = async (req: Request, res: Response) => {
 
 const createToken = async (req: Request, res: Response) => {
     try{
+        const errors = validationResult(req);
+
+        if(!errors.isEmpty()){
+            return res.status(400).json({
+                message: "Не удалось создать токен",
+                error: errors.array()
+            });
+        }
+
         const name: string = req.body.name;
         const account = await AccountModel.findOne({name: name});
 
@@ -76,6 +86,15 @@ const createToken = async (req: Request, res: Response) => {
 
 const updateToken = async (req: Request, res: Response) => {
     try{
+        const errors = validationResult(req);
+
+        if(!errors.isEmpty()){
+            return res.status(400).json({
+                message: "Не удалось обновить токен",
+                error: errors.array()
+            });
+        }
+
         const tokenId = req.params.id;
         const updatedAccountBody = req.body;
         const updatedToken = await TokenModel.findOneAndUpdate({ _id: tokenId }, updatedAccountBody, {new: true});
@@ -93,6 +112,15 @@ const updateToken = async (req: Request, res: Response) => {
 
 const deleteToken = async (req: Request, res: Response) => {
     try{
+        const errors = validationResult(req);
+
+        if(!errors.isEmpty()){
+            return res.status(400).json({
+                message: "Не удалось удалить токен",
+                error: errors
+            });
+        }
+
         const tokenId = req.params.id;
         const deletedToken = await TokenModel.findOneAndDelete({_id: tokenId});
         res.json({

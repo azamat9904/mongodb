@@ -1,5 +1,6 @@
 import { Request, Response } from "express";
 import { AccountModel, IAccount } from "../models/account";
+import { validationResult } from "express-validator";
 
 const getAccounts = async (req: Request, res: Response) => {
     try{
@@ -18,6 +19,18 @@ const getAccounts = async (req: Request, res: Response) => {
 
 const createAccount = async (req: Request, res: Response) => {
     try{
+        // Как можно избавиться от такого повтора кода ??
+        //////////////////////////////////////////////////////
+        const errors = validationResult(req);
+
+        if(!errors.isEmpty()){
+            return res.status(400).json({
+                message: "Не удалось создать аккаунт",
+                error: errors.array()
+            });
+        }
+        //////////////////////////////////////////////////////
+
         const accountBody: IAccount = req.body;
         const account: IAccount = new AccountModel({ ...accountBody });
         await account.save();
@@ -42,6 +55,15 @@ const createAccount = async (req: Request, res: Response) => {
 
 const updateAccount = async (req: Request, res: Response) => {
     try{
+        const errors = validationResult(req);
+
+        if(!errors.isEmpty()){
+            return res.status(400).json({
+                message: "Не удалось обновить аккаунт",
+                error: errors.array()
+            });
+        }
+
         const accountId = req.params.id;
         const updatedAccountBody = req.body;
         const updatedAccount = await AccountModel.findOneAndUpdate({ _id: accountId }, updatedAccountBody, {new: true});
@@ -60,6 +82,15 @@ const updateAccount = async (req: Request, res: Response) => {
 
 const deleteAccount = async (req: Request, res: Response) => {
     try{
+        const errors = validationResult(req);
+
+        if(!errors.isEmpty()){
+            return res.status(400).json({
+                message: "Не удалось удалить аккаунт",
+                error: errors.array()
+            });
+        }
+
         const accountId = req.params.id;
         const deletedAccount = await AccountModel.findOneAndDelete({_id: accountId});
         res.json({
