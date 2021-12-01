@@ -2,6 +2,8 @@ import { Request, Response } from "express";
 import { AccountModel, IAccount } from "../models/account";
 import { validationResult } from "express-validator";
 
+const a = null;
+
 const getAccounts = async (req: Request, res: Response) => {
     try{
         const allAccounts = await AccountModel.find({}).select("_id name surname age isAdmin");
