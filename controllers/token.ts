@@ -4,6 +4,8 @@ import { AccountModel } from "../models/account";
 import { createJwtToken } from "../helpers/createToken";
 import { validationResult } from "express-validator";
 
+const helloWorld = () => console.log("Hello world");
+
 const getTokensByUserName = async (req: Request, res: Response) => {
     try{
         const name = req.body.name;
@@ -134,6 +136,11 @@ const deleteToken = async (req: Request, res: Response) => {
         })
     }
 }
+
+
+
+
+
 
 export default  { getTokens, getTokensByUserName, createToken, updateToken, deleteToken };
 
