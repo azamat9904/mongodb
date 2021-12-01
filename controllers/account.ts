@@ -4,6 +4,9 @@ import { validationResult } from "express-validator";
 
 const helloWorld = () => console.log("Hello world");
 
+const helloEwak = () => console.log("ewak")
+
+
 const getAccounts = async (req: Request, res: Response) => {
     try{
         const allAccounts = await AccountModel.find({}).select("_id name surname age isAdmin");
